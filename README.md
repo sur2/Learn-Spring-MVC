@@ -91,3 +91,6 @@ Web Server - Web Application Server(WAS)- DB
 
 
 ## 서블릿
+
+``@ServletComponentScan``: Servlet을 다 찾아줘!
+
