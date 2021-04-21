@@ -92,5 +92,25 @@ Web Server - Web Application Server(WAS)- DB
 
 ## 서블릿
 
-``@ServletComponentScan``: Servlet을 다 찾아줘!
+``@ServletComponentScan``: 하위 폴더 전체에서 Servlet을 찾아서 등록(서블릿 자동 등록)
+
+``@WebServlet``: url패턴에 대한 service 메서드 실행
+
+
+
+### 1. HttpServletRequest
+
+HTTP 요청 메시지를 파싱
+
+- START LINE
+- header
+- body
+
+부가기능
+
+- 임시 저장소 기능(해당 HTTP 요청의 시작부터 끝날 때 까지 유지)
+  - 저장 ``request.setAttribute(name, value)``
+  - 조회 ``request.getAttribute(name, vlaue)``
+- 세션 관리 기능
+  - ``request.getSession(crate: true)``
 
