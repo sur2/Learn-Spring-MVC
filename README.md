@@ -114,3 +114,30 @@ HTTP 요청 메시지를 파싱
 - 세션 관리 기능
   - ``request.getSession(crate: true)``
 
+ 
+
+### 2. HTTP 요청 데이터
+
+#### 1. GET 쿼리 파라미터
+
+- 조회: ``request.getParameter(name)``
+
+- 메시지 바디가 없음
+- URL에 ``?``를 시작으로 ``Key = value``를 사용, 추가 파라미터는 ``&``로 구분
+- 같은 키의 복수 파라미터 조회 가능 ``request.getParameterValues(name)``
+
+#### 2. POST HTML Form
+
+- 메시지 바디에 쿼리 파라미터 형식으로 전달. ``username=hello&password=123!@#``  
+- context-type: ``application/x-www-form-urlencoded``
+  context-type - 바디에 포함된 데이터가 어떤 형식인지 지정하는 역할
+- 조회는 GET과 동일. ``request.getParameter(name)``
+
+#### 3. API 메시지 바디
+
+- 단순 텍스트
+  - **HTTP message body**에 데이터를 직접 담아서 요청
+  - POST, PUT, PATCH
+  - 조회: ``request.getInputStream()``
+- JSON
+  - 
