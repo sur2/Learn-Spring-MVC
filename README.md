@@ -138,6 +138,27 @@ HTTP 요청 메시지를 파싱
 - 단순 텍스트
   - **HTTP message body**에 데이터를 직접 담아서 요청
   - POST, PUT, PATCH
-  - 조회: ``request.getInputStream()``
+  
 - JSON
-  - 
+  
+  - JSON 형식에 맞춰서 요청하면 됨.
+  
+  - Jackson 라이브러리를 사용하여 객체로 변환가능
+  
+    ```java
+    private ObjectMapper objectMapper = new ObjectMapper();
+    
+        @Override
+        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            ServletInputStream inputStream = request.getInputStream();
+            String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+    
+            System.out.println("messageBody" + messageBody);
+    
+            // Jackson Library - JSON Parser
+            HelloData helloData = objectMapper.readValue(messageBody, HelloData.class);
+            System.out.println("helloData = " + helloData);
+        }
+    ```
+  
+- 조회: ``request.getInputStream()``
