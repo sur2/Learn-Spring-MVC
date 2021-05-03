@@ -162,3 +162,26 @@ HTTP 요청 메시지를 파싱
     ```
   
 - 조회: ``request.getInputStream()``
+
+
+
+### 3. HTTP 응답 데이터
+
+#### 1. 기본 사용법
+
+- response headers를 구성할 수 있는 메서드: ``response.setHeader(name, value)``
+- 편의 메서드
+  - content ``response.setContentType(type);``, ``response.setCharaterEncoding(encode);``
+  - cookie ``Cookie cookie = new Cookie(name, value);``
+  - redirect ``response.sendRedirect(url);``
+
+
+
+#### 2. 응답 데이터
+
+- 단순 텍스트
+- HTML
+- API JSON
+
+
+
