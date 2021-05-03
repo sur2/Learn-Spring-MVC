@@ -180,8 +180,19 @@ HTTP 요청 메시지를 파싱
 #### 2. 응답 데이터
 
 - 단순 텍스트
+
+  - **Content-Type: text/plain;**charset=utf-8
+  -  ``PrintWriter writer = response.getWriter(); writer.println(text);``
+
 - HTML
+
+  - **Content-Type: text/html;**charset=utf-8
+  -  HTML 형식의 문자열 작성, 텍스트와 동일한 ``response.getWriter();`` 메서드를 사용하여 작성 
+
 - API JSON
 
+  - **Content-Type: application/json**
+  - 반환할 객체는 ObjectMapper로 json형식으로 변환 후 반환, ``response.getWriter().write(objectToString);``
+  -  ``application/json``은 스펙상 utf-8 형식을 사용하도록 정의. ``charset=utf-8`` 과 같은 추가 파라미터를 지원하지 않음.
 
-
+  
