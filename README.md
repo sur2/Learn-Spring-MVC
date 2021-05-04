@@ -175,8 +175,6 @@ HTTP 요청 메시지를 파싱
   - cookie ``Cookie cookie = new Cookie(name, value);``
   - redirect ``response.sendRedirect(url);``
 
-
-
 #### 2. 응답 데이터
 
 - 단순 텍스트
@@ -194,5 +192,27 @@ HTTP 요청 메시지를 파싱
   - **Content-Type: application/json**
   - 반환할 객체는 ObjectMapper로 json형식으로 변환 후 반환, ``response.getWriter().write(objectToString);``
   -  ``application/json``은 스펙상 utf-8 형식을 사용하도록 정의. ``charset=utf-8`` 과 같은 추가 파라미터를 지원하지 않음.
+
+
+
+### 4. JSP
+
+#### 1. 사용법
+
+- HTML 형식 + Java 코드 사용 가능
+- 확장자 ``.jsp``
+- JSP 문서를 알리며 첫줄에 삽입 ``<%@ page contentType="text/html;charset=UTF-8" language="java" %>``
+
+- Java의 import 시 ``<%@ page import="hello.servlet.domain.member.MemberRepository" %>``
+- Java 코드 입력 ``<% ~~ %>`` 
+- Java 코드 출력 ``<%= ~~ %>``
+
+  
+
+  
+
+  
+
+  
 
   
