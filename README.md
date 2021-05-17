@@ -295,6 +295,41 @@ HTTP 요청 메시지를 파싱
 
 
 
+### 2. 어댑터 패턴
+프론트 컨트롤러가 다양한 방식의 컨트롤러를 처리할 수 있도록 반영
+
+- 프론트 컨트롤러 - 핸들러 매핑 정보
+  - 핸들러 조회
+- 프론트 컨트롤러 - 핸들러 어댑터 목록
+  - 핸들러를 처리할 수 있는 핸들러  어댑터 조회
+- 프론트 컨트롤러 - 핸들러 어댑터
+  - handle(handler) 전달
+  - 반환된 ModelView
+- 핸들러 어댑터 - 핸들러(컨트롤러)
+  - handler 호출
+- 프론트 컨트롤러 - viewResolver
+  - viewResolver 호출
+  - 반환된 view
+- 프론트 컨트롤러 - 뷰
+  - rander(model) 호출
+
+#### 1. 유연한 컨트롤러 - v5
+
+- 핸들러 어댑터
+
+  - 프론트 컨트롤러와 핸들러(컨트롤러) 사이에서 어댑터 역할을 함.
+
+    ```java
+    public interface MyHandlerAdapter {
+        boolean supports(Object handler);
+        ModelView handle(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException, IOException;
+    }
+    ```
+
+  - 핸들이 ModelView를 반환하기 때문에 다양한 종류의 컨트롤러를 호출 할 수 있다.
+
+- 핸들러: 컨트롤러의 넓은 의미
+
 
 
 
