@@ -266,7 +266,36 @@ HTTP 요청 메시지를 파싱
 
 - 공통으로 HTTP 요청을 받는 서블릿이 인터페이스를 구현한 각 컨트롤러를 호출.
 
-  
+- 각 컨트롤러에서 View(웹 페이지) 호출
+
+  ```java
+  String viewPath = "/WEB-INF/views/new-form.jsp";
+          RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
+          dispatcher.forward(request, response);
+  ```
+
+#### 2. View 분리 - v2
+
+- 각 컨트롤러에서 View(웹 페이지)를 호출하던 부분을 프론트 컨트롤러로 옮김
+  - View(렌더링)를 담당하는 클래스 작성(``MyView``), 각 컨트롤러는 View 객체를 반환
+  - 프론트 컨트롤러에서 View의 렌더링 기능 실행(메서드 호출)
+
+#### 3. Model 추가 - v3
+
+- 서블릿 종속성 제거
+  - 불필요한 ``HttpServletRequest, HttpServletResponse``  코드 제거
+- 뷰 이름 중복 제거
+  - 뷰 리졸버가 추가됨, 컨트롤러가 반환하는 논리 뷰 이름을 실제 물리 뷰 경로로 변경
+- 프론트 컨트롤러의 역할이 증가
+
+#### 4. 단순하고 실용적인 컨트롤러 - v4
+
+- ModelView 객체 생성 및 반환 개선
+  - 컨트롤러가 ``ModelView``를 반환하지 않고, ``ViewName``만 반환한다.
+
+
+
+
 
 
 
