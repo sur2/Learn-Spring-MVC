@@ -332,7 +332,96 @@ HTTP 요청 메시지를 파싱
 
 
 
+## 스프링 MVC
+
+### 1. 스프링 MVC 구조 이해
+
+이전에 만든 프론트 컨트롤러 패턴과 스프링 MVC 비교
+
+- FrontController → DispatcherServlet
+- handlerMappingMap → HandlerMapping
+- MyHandlerAdapter → HandlerAdapter
+- ModelView → ModelAndView
+- viewResolver → ViewResolver
+- MyView → View
+
+#### 1. DispatcherServlet
+
+- 프론트 컨트롤러의 역할을 한다.
+- 핵심 메서드 ``doDispatch()``
+  - 핸들러 조회
+  - 핸들러 어댑터 조회 - 핸들러를 처리할 수 있는 어댑터
+  - 핸들러 어댑터 실행
+  - 핸들러 어댑터를 통해 핸들러 실행
+  - ModelAndView 반환
+  - 뷰 리졸버를 통해서 뷰 찾기
+  - View 반환 - ``forward()`` 로직 내장
+  - 뷰 렌더링
+- 인터페이스 제공
+  - 핸들러 매핑, 핸들러 어댑터, 뷰 리졸버, 뷰
+
+#### 2. 핸들러 매핑과 핸들러 어댑터
+
+- **스프링 빈의 이름으로 핸들러를 찾을 수 있는 핸들러 매핑**이 필요하다.
+- ``Controller``인터페이스를 실행할 수 있는 핸들러 어댑터를 찾고 실행해야 한다.
+- 다행히도 **스프링에서는 핸들러 매핑과 핸들러 어댑터이 구현되어 있다.**
+
+#### 3. 뷰 리졸버
+
+- 스프링 부트는 ``InternalResourceViewResolver``  뷰 리졸버를 자동으로 등록(application.properties에서 설정 가능)
+
+  ```java
+  @Bean
+  ViewResolver internalResourceViewResolver() {
+  	return new InternalResourceViewResolver(prefix, suffix);
+  }
+  ```
+
+- 빈 이름으로 뷰를 찾는 방법도 있다. ``BeanNameViewResolver``
 
 
 
+### 2. 스프링 MVC 시작
+
+#### 1. RequestMapping
+
+- ``@RequestMapping``: 요청 정보를 매핑한다. URL이 호출되면 메서드가 호출된다.
+  - ``RequestMappingHandlerMapping``
+    - 스프링 빈 중에서 ``@RequestMapping`` 또는 ``@Controller``이 클래스 레벨에 있다면 매핑 정보를 인식.
+  - ``RequestMappingHandlerAdapter``
+
+-  ``@Controller``
+  - 스프링 MVC에서 에노테이션 기반 컨트롤러로 인식, ``@Component`` 내장
+
+#### 2. 컨트롤러 통합
+
+- 메서드 레벨의 ``@RequestMapping`` 공통된 클래스에서 정의 가능하다.
+
+- 공통된 클래스는 공통된 URL 경로를 설정할 수 있다.
+
+  ```java
+  @Controller
+  @RequestMapping("/springmvc/v2/members")
+  public class SpringMemberControllerV2
+  ...
+  @RequestMapping("/new-form")
+  public ModelAndView newForm()
+  @RequestMapping("/save")
+  public ModelAndView save(HttpServletRequest request, HttpServletResponse response)
+  ```
+
+#### 3. 실용적인 방식
+
+- ModelAndView 반환 → String 반환
+
+- ``HttpServletRequest``, ``HttpServletResponse`` → ``@RequestParam``
+
+- Model(템플릿 엔진에서 가져올 수 있는 모델)
+
+- GET, POST 구분 가능
+
+  ```java
+  @RequestMapping(value = "/new-form", method = RequestMethod.GET) → @GetMapping("/new-form")
+  @RequestMapping(value = "/save", method = RequestMethod.POST) → @PostMapping("/save")
+  ```
 
