@@ -332,7 +332,7 @@ HTTP 요청 메시지를 파싱
 
 
 
-## 스프링 MVC
+## 스프링 MVC - 구조 이해
 
 ### 1. 스프링 MVC 구조 이해
 
@@ -424,4 +424,86 @@ HTTP 요청 메시지를 파싱
   @RequestMapping(value = "/new-form", method = RequestMethod.GET) → @GetMapping("/new-form")
   @RequestMapping(value = "/save", method = RequestMethod.POST) → @PostMapping("/save")
   ```
+
+
+
+## 스프링 MVC - 기본 기능
+
+스프링 MVC 새 프로젝트 만들기 
+
+- Spring boot 2.5.0, Java 11, Jar
+- Dependency - Spring Web(WEB), Thymeleaf(Template Engines), Lombok(Developer tools)
+
+
+
+### 1. 로깅 Logging
+
+필요한 정보 출력은 시스템 콘솔이 아닌 로깅 라이브러리를 사용한다.
+
+#### 1. 로깅 라이브러리
+
+실무에서는 주로 SLF4J 인터페이스의 구현체인 Logback을 사용한다.
+
+#### 2. 코드
+
+```java
+@Slf4j
+@RestController
+public class LogTestController {
+
+//    @Slf4j 어노테이션으로 대체 가능
+//    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    @GetMapping("/log-test")
+    public String logTest() {
+        String name = "Spring";
+
+        System.out.println("name = " + name);
+
+        // 옳지 못한 방법: 파라메터에 연산자가 있음
+        log.trace("trace log=" + name);
+        // 옳은 방법: 파라메터를 넘겨주자, 연산X
+        log.trace("trace log={}", name);
+        log.debug("debug log={}", name);
+        log.info("info log={}", name);
+        log.warn("warn log={}", name);
+        log.error("error log={}", name);
+
+        return "ok";
+    }
+}
+```
+
+```properties
+#전체 로그 레벨 설정(기본 info)
+logging.level.root=info
+
+#hello.springmvc 패키지와 그 하위 로그 레벨 설정
+logging.level.hello.springmvc=debug
+```
+
+#### 3. 로그가 출력 되는 포멧
+
+시간, 로그 레벨, 프로세스, ID, 쓰레드 명, 클래스 명, 로그 메시지
+
+- 로그 레벨을 설정하여 출력을 제한할 수 있다.
+  - ```TRACE > DEBUG > INFO > WARN > ERROR```
+  - 개발서버는 ```DEBUG``` 권장
+  - 운영서버는 ```INFO``` 권장
+
+#### 4. 주의사항
+
+- 로깅 메서드의 파라메터에 문자열 ```+```와 같은 연산자는 피한다. 
+
+- 왜? 로깅 단계를 확인하기 전에 메서드의 파라메터에서 연산을 수행하기 때문이다.
+- 연산자가 없다면? 로깅 단계를 확인하고 해당 없으면 파라메터를 무시한다.
+
+#### 5. 장점
+
+- 파일로 남길 수 있다.
+- ```System.out```보다 좋다.(내부 버퍼링, 멀티 쓰레드 등)
+
+
+
+### 2. 요청 매핑
 
