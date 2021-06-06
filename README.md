@@ -507,3 +507,46 @@ logging.level.hello.springmvc=debug
 
 ### 2. 요청 매핑
 
+#### 1. @RequestMapping
+
+- 사용법 ```@RequestMapping("경로", HTTP Method)```
+
+  - 경로는 여러 ```,```를 사용해 여러 개를 사용할 수 있다.
+
+  -  스프링에서는 경로 끝에 ```/```가 있든 없든 같은 것으로 간주(원래는 다름!)
+
+  - 축약형: ```@GetMapping @PostMapping @PutMapping @DeleteMapping @PatchMapping ```
+
+  - 경로변수를 사용할 수 있다.
+
+    - 변수명이 경로변수와 같으면 생략가능
+
+      ```java
+       /** * PathVariable 사용
+           * 변수명이 같으면 생략 가능
+           * @PathVariable("userId") String userId -> @PathVariable userId
+           */
+          @GetMapping("/mapping/{userId}")
+      	//public String mappingPath(@PathVariable("userId") String data) {
+          public String mappingPath(@PathVariable String userId) {
+              log.info("mappingPath userId={}", userId);
+              return "ok";
+          }
+      ```
+
+    - ```,```를 사용하여 둘 이상의 경로변수도 가능하다. 
+
+  - ```value = "/mapping-param", params = "mode=debug"``` 쿼리 파라미터로 조건을 달 수 있다.
+
+  - ```value = "/mapping-header", headers = "mode=debug"``` 마찬 가지로 헤더 정보도 가능하다.
+
+  - 이 외에 미디어 타입 조건으로 매핑 가능하다.
+
+
+
+### 3. HTTP  요청
+
+
+
+
+
