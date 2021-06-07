@@ -546,6 +546,65 @@ logging.level.hello.springmvc=debug
 
 ### 3. HTTP  요청
 
+#### 1. 기본, 헤더 요청
+
+```java
+@RequestMapping("/headers")
+    public String headers(HttpServletRequest request,
+                          HttpServletResponse response,
+                          HttpMethod httpMethod,
+                          Locale locale,
+                          // MultiValueMap는 같은 키에 여러 개의 값을 가진다.
+                          @RequestHeader MultiValueMap<String, String> headerMap,
+                          @RequestHeader("host") String host,
+                          @CookieValue(value = "myCookie", required = false) String cookie)
+```
+
+#### 2. 쿼리 파라미터, HTML Form
+
+클라이언트 ➡ 서버
+
+- GET 쿼리 파라미터
+- POST HTML Form
+- HTTP message body
+
+#### 3. @RequestParam
+
+```java
+public String requestParam(
+    @RequestParam("username") String memberName,
+            @RequestParam("age") int memberAge)
+```
+
+- 파라미터와 쿼리 파리미터가 동일하면 쿼리 파리미터 변수명 생략가능
+
+  - ```String , int , Integer``` 등의 단순 타입이면 ```@RequestParam``` 도 생략 가능
+
+- ```@RequestParam(required = true or false, defaultValuse = "value")``` : true면 필수, false면 생략 가능한 파라미터
+
+  - 생략 시 ``null``값이 들어가게 되므로 Class type의 파라미터를 사용할 것
+  - ``defaultValue``를 사용하면 미리 정의한 기본값을 사용(빈 문자도 기본값으로 처리)
+
+- 요청 파라미터를 ``Map, MultiValueMap``으로 조회할 수 있다.
+
+  ```java
+  public String requestParamMap(@RequestParam Map<String, Object> paramMap)
+  ```
+
+#### 4. @ModelAttribute
+
+**객체(``Object``)를 조회**
+
+```java
+public String modelAttributeV1(@ModelAttribute HelloData helloData)
+```
+
+- 객체의 ``setter``메서드에 맞는 변수를 바인딩한다. (즉, 객체가 통으로 대입되는 효과)
+- ``@ModelAttribute`` 또한 생략가능하다. 
+  - argument resolver로 지정해둔 타입은 제외(``HttpServletResponse``...)
+
+
+
 
 
 
