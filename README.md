@@ -544,7 +544,7 @@ logging.level.hello.springmvc=debug
 
 
 
-### 3. HTTP  요청
+### 3. HTTP 요청
 
 #### 1. 기본, 헤더 요청
 
@@ -604,6 +604,80 @@ public String modelAttributeV1(@ModelAttribute HelloData helloData)
   - argument resolver로 지정해둔 타입은 제외(``HttpServletResponse``...)
 
 
+
+### 4. HTTP 요청 메시지
+
+HTTP message body에 데이터(JSON, XML, TEXT 등)를 담아서 전송할 경우 요청 파라미터와 다르게 ``@ResquestParam``, ``@ModelAttribute``를 사용할 수 없다. (HTML Form은 요청 파라미터로 인정됨)
+
+요청 메시지랑 요청 파라미터는 구분해야한다.
+
+#### 1. 단순 텍스트
+
+- InputStream
+
+  ```java
+  public void requestBodyString(HttpServletRequest request, HttpServletResponse response)
+  		ServletInputStream inputStream = request.getInputStream();
+          String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+  
+  public void requestBodyStringV2(InputStream inputStream, Writer responseWriter)
+  		String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+  ```
+
+- HttpEntity
+
+  ```java
+  public HttpEntity<String> requestBodyStringV3(HttpEntity<String> httpEntity) {
+          String messageBody = httpEntity.getBody();
+      	return new ResponseEntity<String>("ok", HttpStatus.CREATED);
+  }
+  ```
+
+  - ``HttpEntity``를 상속 받은 객체를 사용할 수 있다.
+    - ``RequestEntity``, ``ResponseEntity``
+
+- @RequsetBody
+
+  ```java
+  public String requestBodyStringV4(@RequestBody String messageBody) {
+  ```
+
+  - Body가 필요한 경우 ``@RequestBody ``를 사용하여 빠르게 조회 가능하다.
+
+#### 2. Json
+
+- Servlet
+
+  ```java
+  private ObjectMapper objectMapper = new ObjectMapper();
+  
+  @PostMapping("/request-body-json-v1")
+  public void requestBodyJsonV1(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      ServletInputStream inputStream = request.getInputStream();
+      String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+  
+      log.info("messageBody={}", messageBody);
+      HelloData helloData = objectMapper.readValue(messageBody, HelloData.class);
+      log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+  
+      response.getWriter().write("ok");
+  }
+  ```
+
+- HttpEntity
+
+  ```java
+  public String requestBodyJsonV4(HttpEntity<HelloData> httpEntity)
+      HelloData helloData = httpEntity.getBody();
+  ```
+
+- @RequestBody
+
+  ```java
+  public HelloData requestBodyJsonV5(@RequestBody HelloData helloData)
+  ```
+
+  
 
 
 
