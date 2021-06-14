@@ -679,7 +679,48 @@ HTTP message body에 데이터(JSON, XML, TEXT 등)를 담아서 전송할 경�
 
   
 
+### 5. 응답
+
+#### 1. HTTP 응답
+
+- 정적 리소스
+  - 스프링 부트는 ``src/main/resources ``에서 ``/static , /public , /resources , /META-INF/resources`` 경로를 제공함.
+- 뷰 템플릿
+  - ``src/main/resources/templates``
+  - 스프링 부트의 대표적인 뷰 템플릿: **Thymeleaf**
+- HTTP 메시지
+
+#### 2. HTTP API, 메시지 바디
+
+- ``HttpEntity`` 또는 ``ResponseEntity``
+- ``@RestController``: `` @Controller`` 와 ``@ResponseBody``를 합친 어노테이션
 
 
 
+### 6. 요청 매핑 핸들러 어댑터 구조
 
+#### 1. RequestMappingHandlerAdapter
+
+``@RequestMapping``을 처리하는 핸들러 어댑터이다.
+
+다음과 같은 작동 과정이 존재한다. (Dispathcer Servlet에서 핸들러 어댑터를 요청한 후 과정)
+
+1. **Argument Resolver**: HTTP 요청 파리미터 생성
+
+2. **Handler(Controller)**: 컨트롤러 로직 처리(메서드 호출)
+
+3. **ReturnValue Handler**: HTTP 응답 반환
+
+#### 2. Argument Resolver
+
+어노테이션 기반의 컨트롤러에서 다양한 파리미터를 유연하게 처리한다.
+
+#### 3. ReturnValue Handler
+
+어노테이션 기반의 컨트롤러에서 HTTP 응답을 위한 값을 변환하고 처리한다.
+
+#### 4. HTTP 메시지 컨버터
+
+- **HTTP 요청**(Argument Resolver 과정 중 ``@RequestBody``, ``HttpEntity``)에 사용
+- **HTTP 응답**(ReturnValue Handler 과정 중 ``@ResponseBody``, ``HttpEntity``)에 사용
+- ByteArray, String, Json 등 다양한 메시지 컨버터가 있으며, **대상 클래스 타입과  미디어 타입** 둘을 체크하여 사용여부를 결정한다.
